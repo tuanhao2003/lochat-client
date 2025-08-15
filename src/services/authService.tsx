@@ -1,14 +1,29 @@
-import { BaseApi } from "@/services/baseApi";
+import { BaseApi, SetToken } from "@/services/baseApi";
 import type { LoginRequest } from "@/types/apiAuth";
-import type { TokensResponse } from "@/types/apiAuth";
+import type { LoginResponse } from "@/types/apiAuth";
 
 const DoLogin = async ({ email, password, username }: LoginRequest) => {
     if (email || username) {
-        return await BaseApi.post<TokensResponse>("/login", { email, password, username });
+        return await BaseApi.post<LoginResponse>("/login", { email, password, username });
     }
     else {
         return null;
     }
 }
 
-export { DoLogin };
+const DoValidateToken = async (token: string) => {
+    if (!token) {
+        return null;
+    }
+    SetToken(token);
+    return await BaseApi.post<LoginResponse>("/validate-token");
+}
+
+const DoRestockToken = async (refreshToken: string) => {
+    if (!refreshToken) {
+        return null;
+    }
+    return await BaseApi.post<LoginResponse>("/restock-token", { token: refreshToken });
+}
+
+export { DoLogin, DoValidateToken, DoRestockToken };

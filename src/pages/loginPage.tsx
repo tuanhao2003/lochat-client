@@ -1,15 +1,42 @@
 import TextBox from "@/components/textBox";
 import Button from "@/components/button";
-import { DoLogin } from "@/services/authService";
-import { useState } from "react";
-import type { TokensResponse } from "@/types/apiAuth";
+import { DoLogin, DoValidateToken } from "@/services/authService";
+import { useState, useEffect } from "react";
+import type { LoginResponse } from "@/types/apiAuth";
+import { ACCOUNT_STATUS } from "@/constants/accountStatus";
+import { UseUser } from "@/contexts/userContext";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [token, setToken] = useState<TokensResponse["data"]>(null);
+    const [loginData, setLoginData] = useState<LoginResponse["data"]>(null);
+    const { setUser } = UseUser()
 
+    useEffect(() => {
+        const token = localStorage.getItem("access_token");
+        if (token && token !== "") {
+            DoValidateToken(token)
+                .then(response => {
+                    if (response && response.data) {
+                        setLoginData(response.data.data);
+                    }
+                });
+        }
+    }, []);
+
+    useEffect(() => {
+        if (loginData) {
+            localStorage.setItem("access_token", loginData.access_token);
+            localStorage.setItem("refresh_token", loginData.refresh_token);
+            if (loginData.account === ACCOUNT_STATUS.DEACTIVATED) {
+                alert("Your account has been deactivated. Please contact support.");
+            } else {
+                setUser(loginData.account);
+                window.location.href = "/conversations";
+            }
+        }
+    }, [loginData, setUser]);
 
     return (
         <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
@@ -31,21 +58,18 @@ const LoginPage = () => {
                         await DoLogin({ email, password, username }).then(response => {
                             if (response) {
                                 if (response) {
-                                    setToken(response.data.data || null);
-                                    console.log(token);
-                                    window.location.href = "/conversations";
+                                    setLoginData(response.data.data);
                                 }
                             } else {
-                                console.error("Login failed");
+                                alert("Login failed");
                             }
                         }).catch(error => {
-                            console.error("An error occurred during login", error);
-                        }
-                        );
+                            alert(`An error occurred during login ${error}`);
+                        });
                     }}>Gửi</Button>
                     <div className="flex justify-between w-3/4 items-center mt-6 text-lg text-blue-500">
-                        <a href="" className="decoration-0 hover:decoration-2 hover:underline">Tạo Tài Khoản</a>
-                        <a href="" className="decoration-0 hover:decoration-2 hover:underline">Quên mật khẩu?</a>
+                        <a href="/registry" className="decoration-0 hover:decoration-2 hover:underline">Tạo Tài Khoản</a>
+                        <a href="/forgot-password" className="decoration-0 hover:decoration-2 hover:underline">Quên mật khẩu?</a>
                     </div>
                 </div>
             </div>
@@ -54,3 +78,5 @@ const LoginPage = () => {
 }
 
 export default LoginPage;
+
+// them cong axios vao be
