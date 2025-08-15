@@ -5,13 +5,13 @@ type ConversationItemProps = {
     conversationName?: string;
     lastMessage?: string;
     conversationAvt?: string;
-    key: string;
+    conversationId: string;
     lastSenderName?: string;
 }
 
-const ConversationItem = ({ className, lastSenderName, conversationName, lastMessage, conversationAvt, key }: ConversationItemProps) => {
+const ConversationItem = ({ className, lastSenderName, conversationName, lastMessage, conversationAvt, conversationId }: ConversationItemProps) => {
     return (
-        <div id={key} className={`w-full p-2 border border-gray-300 rounded-2xl grid grid-cols-4 gap-2 ${className}`}>
+        <div id={conversationId} className={`w-full p-2 border border-gray-300 rounded-2xl grid grid-cols-4 gap-2 ${className}`}>
             <div className="overflow-hidden rounded-4xl aspect-square object-cover">
                 <ImageContainer src={conversationAvt} />
             </div>

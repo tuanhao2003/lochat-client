@@ -24,6 +24,12 @@ type TokensResponse = BaseResponse<{
     refresh_token: string;
 } | null>;
 
+type LoginResponse = BaseResponse<{
+    access_token: string;
+    refresh_token: string;
+    account: User | string;
+} | null>;
+
 type RegisterResponse = BaseResponse<User | null>;
 
-export type { LoginRequest, RegisterRequest, RestockRequest, TokensResponse, RegisterResponse, };
+export type { LoginRequest, RegisterRequest, RestockRequest, TokensResponse, RegisterResponse, LoginResponse };
