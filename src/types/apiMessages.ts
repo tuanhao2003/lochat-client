@@ -20,10 +20,13 @@ type ConversationMessagesRequest = {
     page_size?: number;
 }
 
-type ConversationMessagesResponse = BaseResponse<{
+type ResponseList = BaseResponse<{
     pages_count: number;
     current_page: number;
     page_content: Message[];
 } | null>;
 
-export type { Message, ConversationMessagesRequest, ConversationMessagesResponse };
+type ResponseOne = BaseResponse<Message>;
+
+
+export type { Message, ConversationMessagesRequest, ResponseList, ResponseOne };

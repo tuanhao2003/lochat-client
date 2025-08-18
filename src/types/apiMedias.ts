@@ -14,6 +14,6 @@ type UploadRequest = {
     };
 };
 
-type UploadResponse = BaseResponse<Media | null>;
+type UploadResponse = BaseResponse<Media>;
 
 export type { Media, UploadRequest, UploadResponse };

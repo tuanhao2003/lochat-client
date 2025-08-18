@@ -27,7 +27,7 @@ type TokensResponse = BaseResponse<{
 type LoginResponse = BaseResponse<{
     access_token: string;
     refresh_token: string;
-    account: User | string;
+    account: User | null;
 } | null>;
 
 type RegisterResponse = BaseResponse<User | null>;

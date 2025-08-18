@@ -12,10 +12,12 @@ type Conversation = {
     creator: string;
 }
 
-type UserConversationsResponse = BaseResponse<{
+type ResponseList = BaseResponse<{
     pages_count: number;
     current_page: number;
     page_content: Conversation[];
 } | null>;
 
-export type { Conversation, UserConversationsResponse };
+type ResponseOne = BaseResponse<Conversation>;
+
+export type { Conversation, ResponseList, ResponseOne };

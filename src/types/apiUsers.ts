@@ -24,10 +24,6 @@ type GetAllUsers = {
 
 type SearchRequest = SearchByEmailOrUsername | GetAllUsers;
 
-type ResponseOne = BaseResponse<User | null>;
+type ResponseOne = BaseResponse<User>;
 
-type ResponseList = BaseResponse<User[] | null>;
-
-type SearchResponse = ResponseOne | ResponseList;
-
-export type { User, SearchRequest, SearchResponse };
+export type { User, SearchRequest, ResponseOne };
