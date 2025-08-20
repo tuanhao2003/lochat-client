@@ -1,5 +1,5 @@
 import TextBox from "@/components/TextBox";
-import ConversationItem from "@/components/ConversationItem";
+import ConversationItem from "@/components/conversationItem";
 import type { Conversation } from "@/types/apiConversations";
 import type { Message } from "@/types/apiMessages";
 import type { User } from "@/types/apiUsers";
@@ -25,7 +25,7 @@ const SideBar = ({conversationsInfor, className, chatting}: SideBarProps) => {
             <div className="flex-1 h-0 m-4 p-2 border border-gray-300 rounded-2xl shadow-inner overflow-hidden overflow-y-scroll scrollbar-hidden">
                 {conversationsInfor?.map((infor) => (                    
                     <ConversationItem
-                        onClick={() => chatting(infor.conversation?.id || "")}
+                        onClick={() => chatting?chatting(infor.conversation?.id || ""):function(){}}
                         conversationId={infor.conversation?.id}
                         className="mb-2"
                         conversationName={infor.conversation?.title}
