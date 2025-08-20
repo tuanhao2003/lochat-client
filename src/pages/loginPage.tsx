@@ -17,15 +17,12 @@ const LoginPage = () => {
 
     useEffect(() => {
         const autoLoginUsingToken = () => {
-            const token = localStorage.getItem("access_token");
-            if (token && token !== "") {
-                tokenProcessing(() => validateToken(token))
-                    .then(response => {
-                        if (response) {
-                            setLoginData(response.data);
-                        }
-                    });
-            }
+            tokenProcessing(() => validateToken())
+                .then(response => {
+                    if (response) {
+                        setLoginData(response.data);
+                    }
+                });
         }
 
         autoLoginUsingToken();

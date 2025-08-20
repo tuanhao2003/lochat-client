@@ -7,6 +7,7 @@ import type { Conversation } from "@/types/apiConversations";
 import type { Message } from "@/types/apiMessages";
 import type { User } from "@/types/apiUsers";
 import { getUserByID } from "@/services/usersService";
+import ChatContainer from "@/components/ChatContainer";
 
 const ConversationsPage = () => {
     const tokenProcessing = useTokenProcessing();
@@ -21,7 +22,7 @@ const ConversationsPage = () => {
                 if (!token) return;
 
                 let conversations: Conversation[] | undefined;
-                await tokenProcessing(() => getAccountConversations(token))
+                await tokenProcessing(() => getAccountConversations())
                     .then((conversationsResponse) => {
                         if (conversationsResponse) {
                             conversations = conversationsResponse.data?.page_content;
@@ -36,12 +37,12 @@ const ConversationsPage = () => {
                         conversations.map(async (conv) => {
                             const conversationsInfor: { conversation?: Conversation, message?: Message, sender?: User } = {};
                             conversationsInfor.conversation = conv;
-                            await tokenProcessing(() => getLastMessageInConversation(token, conv.id))
+                            await tokenProcessing(() => getLastMessageInConversation(conv.id))
                                 .then(async (messageResponse) => {
                                     console.log(messageResponse?.data)
                                     if (messageResponse) {
                                         conversationsInfor.message = messageResponse.data;
-                                        await tokenProcessing(() => getUserByID(token, messageResponse.data.sender_relation))
+                                        await tokenProcessing(() => getUserByID(messageResponse.data.sender_relation))
                                             .then((userResponse) => {
                                                 conversationsInfor.sender = userResponse?.data;
                                             })
@@ -77,7 +78,9 @@ const ConversationsPage = () => {
         <div className="h-screen w-screen p-0 m-0 bg-gray-100 flex items-center justify-center">
             <div className="h-[90%] w-[90%] bg-transparent grid grid-cols-4 gap-4">
                 <SideBar chatting={setChattingId} conversationsInfor={conversationsInfor} />
-                <div className="col-span-3 bg-gray-50 backdrop-blur-lg rounded-2xl shadow-inner-lg w-full h-full justify-between shadow-md border border-gray-300 overflow-hidden"></div>
+                <div className="col-span-3 bg-gray-50 backdrop-blur-lg rounded-2xl shadow-inner-lg w-full h-full shadow-md border border-gray-300 overflow-hidden">
+                    <ChatContainer />
+                </div>
             </div>
         </div>
     )

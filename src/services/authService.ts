@@ -1,4 +1,4 @@
-import { baseApi, setToken } from "@/services/baseApi";
+import { baseApi } from "@/services/baseApi";
 import type { LoginRequest } from "@/types/apiAuth";
 import type { LoginResponse } from "@/types/apiAuth";
 
@@ -11,11 +11,7 @@ const handleLogin = async ({ email, password, username }: LoginRequest) => {
     }
 }
 
-const validateToken = async (token: string) => {
-    if (!token) {
-        return null;
-    }
-    setToken(token);
+const validateToken = async () => {
     return await baseApi.post<LoginResponse>("/validate-token");
 }
 

@@ -1,54 +1,46 @@
-type WsMessage = {
-    type: string;
-    content: string;
-    reply_to?: string | null;
-    media_name?: string | null;
-    media_type?: string | null;
-    media_size?: number | null;
-    media_url?: string | null;
-};
+const baseWebsocket = <ReceivedData = any>() => {
+    let ws: WebSocket | null = null;
+    const handlers = new Set<(data: ReceivedData) => void>();
 
-class baseWebsocket {
-    private ws: WebSocket | null = null;
+    const connect = (token: string, chatID: string) => {
+        ws = new WebSocket(`${import.meta.env.VITE_WS_HOST}:${import.meta.env.VITE_WS_PORT}/chat/${chatID}?token=${token}`);
 
-    constructor() {
-    }
-
-    connect(chatID: string, token: string, onMessage: (msg: any) => void) {
-        this.ws = new WebSocket(`${import.meta.env.VITE_WS_HOST}:${import.meta.env.VITE_WS_PORT}/chat/${chatID}?token=${token}`);
-
-        this.ws.onopen = () => {
-            console.log("Connected to conversation:", chatID);
+        ws.onmessage = (e) => {
+            try {
+                const rawData = e.data;
+                const data: ReceivedData = JSON.parse(rawData);
+                handlers.forEach(handler => handler(data));
+            } catch (error) {
+                console.log(error);
+            }
         };
 
-        this.ws.onmessage = (e) => {
-            console.log("New message:", e.data);
-            onMessage(JSON.parse(e.data));
+        ws.onclose = () => {
+            ws = null;
         };
 
-        this.ws.onclose = () => {
-            console.log("Connection closed");
-        };
-
-        this.ws.onerror = (e) => {
+        ws.onerror = (e) => {
             console.error("Connection error:", e);
         };
+
+        return ws;
     }
 
-    sendMessage(msg: WsMessage) {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify(msg));
-        } else {
-            console.error("WebSocket is not connected!");
+    const disconnect = () => {
+        if (ws) {
+            ws.close();
+            ws = null;
+            console.log("Disconnected websocket");
         }
     }
 
-    disconnect() {
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
-    }
+    return {
+        connect: (token: string, chatID: string) => connect(token, chatID),
+        disconnect: () => disconnect(),
+        addHandler: (handler: (data: ReceivedData) => void) => handlers.add(handler),
+        removeHandler: (handler: (data: ReceivedData) => void) => handlers.delete(handler),
+        getHandlers: () => Array.from(handlers),
+    };
 }
 
 export default baseWebsocket;

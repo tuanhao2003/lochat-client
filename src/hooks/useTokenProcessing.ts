@@ -9,10 +9,14 @@ const useTokenProcessing = () => {
 
     const checkMessageResponse = async <T>(apiCall: () => Promise<AxiosResponse<T> | null>): Promise<T | undefined> => {
         try {
+            const token = localStorage.getItem("access_token") || null;
+            if (token) {
+                setToken(token)
+            }
             const response = await apiCall();
             return response?.data;
         } catch (err: any) {
-            if (err.response?.data?.message === "expired_token") {
+            if (err.response?.data?.message === "expired_token" || err.response?.data?.message === "missing_token") {
                 const refreshToken = localStorage.getItem("refresh_token");
                 if (!refreshToken) {
                     navigate("/login");
