@@ -71,9 +71,9 @@ const LoginPage = () => {
 
     return (
         <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
-            <div className="w-1/2 h-3/4 rounded-4xl bg-blue-100 border border-gray-300 shadow-lg flex flex-col items-center justify-center">
+            <div className="w-1/2 h-fit py-6 rounded-4xl bg-blue-100 border border-gray-300 shadow-lg flex flex-col items-center justify-center">
                 <div className="flex flex-1 items-center justify-center">
-                    <div className="text-4xl font-semibold text-gray-700 text-shadow-md">Đăng Nhập</div>
+                    <div className="text-4xl font-semibold text-gray-700 text-shadow-md mb-4">Đăng Nhập</div>
                 </div>
                 <div className="flex-3 w-full items-center justify-start flex flex-col">
                     <div className="text-xl text-shadow-md text-gray-700 w-3/4 font-semibold">Tên đăng nhập hoặc email:</div>
@@ -86,10 +86,10 @@ const LoginPage = () => {
                         setPassword(e.target.value);
                     }} className="border border-gray-300 shadow-md text-lg w-3/4 focus:scale-105 focus:outline-1 focus:shadow-blue-300 outline-blue-500 transition-all duration-500 mb-6" type="password" placeholder="Nhập mật khẩu" />
                     <Button className="w-3/4 font-semibold text-xl text-gray-100 hover:bg-gray-100 hover:text-blue-500 hover:scale-105 hover:border-gray-400 shadow-md transition-all duration-500 origin-center hover:shadow-gray-300" onClick={loginButtonClick}>Gửi</Button>
-                    <div className={`${responseMessage == "" ? "invisible" : ""} text-red-500 font-semibold w-3/4 h-8 my-3 text-lg`}>*{responseMessage}</div>
+                    <div className={`${responseMessage == "" ? "invisible" : ""} text-red-500 font-semibold w-3/4 h-fit my-2 `}>*{responseMessage}</div>
                     <div className="flex justify-between w-3/4 items-center text-lg text-blue-500">
-                        <a href="/registry" className="decoration-0 hover:decoration-2 hover:underline">Tạo Tài Khoản</a>
-                        <a href="/forgot-password" className="decoration-0 hover:decoration-2 hover:underline">Quên mật khẩu?</a>
+                        <a onClick={() => {navigate("/sign-up")}} className="decoration-0 hover:decoration-2 hover:underline">Tạo Tài Khoản</a>
+                        <a onClick={() => {navigate("/forgot-password")}} className="decoration-0 hover:decoration-2 hover:underline">Quên mật khẩu?</a>
                     </div>
                 </div>
             </div>
