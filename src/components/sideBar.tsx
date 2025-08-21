@@ -1,5 +1,5 @@
 import TextBox from "@/components/TextBox";
-import ConversationItem from "@/components/conversationItem";
+import ConversationItem from "@/components/ConversationItem";
 import type { Conversation } from "@/types/apiConversations";
 import type { Message } from "@/types/apiMessages";
 import type { User } from "@/types/apiUsers";

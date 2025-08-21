@@ -1,4 +1,4 @@
-import SideBar from "@/components/sideBar"
+import SideBar from "@/components/SideBar"
 import { useState, useEffect } from "react";
 import { getAccountConversations } from "@/services/conversationsService";
 import { getLastMessageInConversation } from "@/services/messagesService";
